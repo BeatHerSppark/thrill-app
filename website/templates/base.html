@@ -24,10 +24,14 @@
           <h1>Thrill</h1>
         </div>
         <ul class="nav__links">
+          {% if g.user %}
+          <li><span>{{ g.user['username'] }}</span></li>
           <li><a href="#">Create</a></li>
-          <li><a href="#">Register</a></li>
-          <li><a href="#">Login</a></li>
-          <li><a href="#">Logout</a></li>
+          <li><a href="{{ url_for('auth.logout') }}">Logout</a></li>
+          {% else %}
+          <li><a href="{{ url_for('auth.register') }}">Register</a></li>
+          <li><a href="{{ url_for('auth.login') }}">Login</a></li>
+          {% endif %}
         </ul>
       </div>
     </nav>

@@ -13,6 +13,8 @@ def create_app():
     app.register_blueprint(views, url_prefix='/')
     app.register_blueprint(auth, url_prefix='/auth')
 
+    app.add_url_rule('/', endpoint='home')
+
     from . import db
     db.init_app(app)
     
