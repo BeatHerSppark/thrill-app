@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='style.css') }}"
+    />
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='reset.css') }}"
+    />
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='utils.css') }}"
+    />
+    <title>{% block title %}{% endblock %}</title>
+  </head>
+  <body>
+    <nav>
+      <div class="container container__nav">
+        <div class="nav__logo">
+          <h1>Thrill</h1>
+        </div>
+        <ul class="nav__links">
+          <li><a href="#">Create</a></li>
+          <li><a href="#">Register</a></li>
+          <li><a href="#">Login</a></li>
+          <li><a href="#">Logout</a></li>
+        </ul>
+      </div>
+    </nav>
+    {% for message in get_flashed_messages() %}
+    <div class="flash">{{message}}</div>
+    {% endfor %} {% block content %}{% endblock %}
+  </body>
+</html>

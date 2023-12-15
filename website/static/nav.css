@@ -1,0 +1,23 @@
+nav {
+  padding: 1.25rem 1.5rem;
+  background-color: #9d8189;
+  color: white;
+}
+
+.container__nav {
+  display: flex;
+  align-items: center;
+}
+
+.nav__logo {
+  flex: 1;
+}
+
+.nav__links {
+  list-style: none;
+  display: flex;
+  gap: 1rem;
+}
+.nav__links a {
+  text-decoration: none;
+}
