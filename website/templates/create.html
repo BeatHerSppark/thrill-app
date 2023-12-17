@@ -1,0 +1,21 @@
+{% extends "base.html" %} {% block title %}Create - Thrill{% endblock %} {%
+block content %}
+<div class="container">
+  <form method="post">
+    <div class="post__title">
+      <label for="title">Title:</label><br />
+      <input
+        type="text"
+        id="title"
+        name="title"
+        value="{{ request.form['title'] }}"
+      />
+    </div>
+    <div class="post__body">
+      <label for="body">Description:</label><br />
+      <textarea name="body" id="body">{{request.form['body']}}</textarea>
+    </div>
+    <input type="submit" value="Create" />
+  </form>
+</div>
+{% endblock %}

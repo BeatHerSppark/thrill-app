@@ -1,4 +1,30 @@
 {% extends "base.html" %} {% block title %}Home - Thrill{% endblock %} {% block
 content %}
-<h1>u are now home</h1>
+<div class="container home">
+  <div
+    class="home__posts grid"
+    data-masonry='{ "itemSelector": ".grid-item", "columnWidth": 300 }'
+  >
+    {% if not posts %}
+    <h3>Wow.. maybe you can be our first thrill!</h3>
+    {% else %} {% for post in posts %}
+    <div class="grid-item">
+      <img
+        src="https://webcoursesbangkok.com//wp-content/uploads/2021/06/carl-heaton.jpg"
+        alt="post"
+      />
+      <div class="post__details">
+        <h3>{{ post['title'] }}</h3>
+        <p>{{ post['body'] }}</p>
+      </div>
+    </div>
+    {% endfor %} {% endif %}
+  </div>
+  <div class="home__side">
+    <h3>Welcome to Thrill!</h3>
+    <p>Nice to have your here, you can start up by making an account!</p>
+    <p>In order to thrill some Thrills, you need to be signed in :)</p>
+    <button>Get Started</button>
+  </div>
+</div>
 {% endblock %}
