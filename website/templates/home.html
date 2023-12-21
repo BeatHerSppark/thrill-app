@@ -17,9 +17,7 @@ content %}
         <h3>{{ post['title'] }}</h3>
         <p>{{ post['body'] }}</p>
         {% if g.user['id'] == post['author_id'] %}
-        <form action="{{url_for('views.delete', id=post['id'])}}" method="post">
-          <input type="submit" value="Delete" />
-        </form>
+        <a href="{{ url_for('views.edit', id=post['id']) }}">Edit</a>
         {% endif %}
       </div>
     </div>

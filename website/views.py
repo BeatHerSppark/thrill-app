@@ -60,6 +60,26 @@ def get_post(id, check_author=True):
     return post
 
 
+@views.route('/<int:id>/edit', methods=('GET', 'POST'))
+@login_required
+def edit(id):
+    post = get_post(id)
+
+    if request.method == 'POST':
+        title = request.form['title']
+        body = request.form['body']
+        
+        db = get_db()
+        db.execute(
+            'UPDATE post SET title= ?, body = ?'
+            ' WHERE id = ?', (title, body, id)
+        )
+        db.commit()
+        return redirect(url_for('views.home'))
+    
+    return render_template('edit.html', post=post)
+
+
 @views.route('/<int:id>/delete', methods=('POST',))
 @login_required
 def delete(id):
