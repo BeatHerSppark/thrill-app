@@ -16,6 +16,11 @@ content %}
       <div class="post__details">
         <h3>{{ post['title'] }}</h3>
         <p>{{ post['body'] }}</p>
+        {% if g.user['id'] == post['author_id'] %}
+        <form action="{{url_for('views.delete', id=post['id'])}}" method="post">
+          <input type="submit" value="Delete" />
+        </form>
+        {% endif %}
       </div>
     </div>
     {% endfor %} {% endif %}
