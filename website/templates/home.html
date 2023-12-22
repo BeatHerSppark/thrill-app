@@ -10,12 +10,13 @@ content %}
     {% else %} {% for post in posts %}
     <div class="grid-item">
       <img
-        src="https://webcoursesbangkok.com//wp-content/uploads/2021/06/carl-heaton.jpg"
+        src="{{ url_for('static', filename=post['image_path']) }}"
         alt="post"
       />
       <div class="post__details">
         <h3>{{ post['title'] }}</h3>
         <p>{{ post['body'] }}</p>
+        <p>{{ post['image_path'] }}</p>
         {% if g.user['id'] == post['author_id'] %}
         <a href="{{ url_for('views.edit', id=post['id']) }}">Edit</a>
         {% endif %}
@@ -27,7 +28,9 @@ content %}
     <h3>Welcome to Thrill!</h3>
     <p>Nice to have your here, you can start up by making an account!</p>
     <p>In order to thrill some Thrills, you need to be signed in :)</p>
-    <button>Get Started</button>
+    <form action="{{ url_for('auth.register') }}" method="get">
+      <input class="home__side-btn" type="submit" value="Get Started" />
+    </form>
   </div>
 </div>
 {% endblock %}

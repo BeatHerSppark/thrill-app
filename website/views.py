@@ -1,8 +1,11 @@
+import os
 from flask import (Blueprint, render_template, flash, g, redirect, request, url_for)
 from werkzeug.exceptions import abort
+from werkzeug.utils import secure_filename
 
 from website.auth import login_required
 from website.db import get_db
+from website import ALLOWED_EXTENSIONS, UPLOAD_FOLDER, create_app
 
 from .auth import login_required
 from .db import get_db
@@ -14,11 +17,16 @@ views = Blueprint('views', __name__)
 def home():
     db  = get_db()
     posts = db.execute(
-        'SELECT p.id, title, body, created, author_id, username'
+        'SELECT p.id, title, body, created, author_id, image_path, username'
         ' FROM post p JOIN user u ON p.author_id = u.id'
         ' ORDER BY created DESC'
     ).fetchall()
     return render_template('home.html', posts=posts)
+
+
+def allowed_file(filename):
+    return '.' in filename and \
+           filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
 
 @views.route('/create', methods=('GET', 'POST'))
@@ -29,14 +37,29 @@ def create():
         body = request.form['body']
         error = None
 
+        if 'image' not in request.files:
+            flash('No image!')
+            return redirect(url_for('views.create'))
+        
+        image = request.files['image']
+        filename = None
+
+        if image.filename == '':
+            flash('No image!')
+            return redirect(url_for('views.create'))
+        if image and allowed_file(image.filename):
+            filename = secure_filename(image.filename)
+            image.save(os.path.join(create_app().config['UPLOAD_FOLDER'], filename))
+            
+
         if error is not None:
             flash(error)
         else:
             db = get_db()
             db.execute(
-                'INSERT INTO post (title, body, author_id)'
-                ' VALUES (?, ?, ?)',
-                (title, body, g.user['id'])
+                'INSERT INTO post (title, body, author_id, image_path)'
+                ' VALUES (?, ?, ?, ?)',
+                (title, body, g.user['id'], f"/images/{filename}")
             )
             db.commit()
             return redirect(url_for('views.home'))
@@ -83,7 +106,6 @@ def edit(id):
 @views.route('/<int:id>/delete', methods=('POST',))
 @login_required
 def delete(id):
-    print("in delete func")
     get_post(id)
     db = get_db()
     db.execute('DELETE FROM post WHERE id = ?', (id,))
