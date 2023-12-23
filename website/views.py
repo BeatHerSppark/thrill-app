@@ -69,7 +69,7 @@ def create():
 
 def get_post(id, check_author=True):
     post = get_db().execute(
-        'SELECT p.id, title, body, created, author_id, username'
+        'SELECT p.id, title, body, created, image_path, author_id, username'
         ' FROM post p JOIN user u ON p.author_id = u.id'
         ' WHERE p.id = ?', (id,)
     ).fetchone()
@@ -91,6 +91,17 @@ def edit(id):
     if request.method == 'POST':
         title = request.form['title']
         body = request.form['body']
+        #print(post['image_path'])
+        #image = None
+        #filename = None
+        #oldImage = get_db().execute(
+        #    'SELECT p.id, image_path FROM post p WHERE p.id = ?', (id,)
+        #)
+
+        #if 'image' in request.files:
+        #    image = request.files['image']
+        #    if image.filename != '' and allowed_file(image.filename):
+        #        filename = secure_filename(image.filename)
         
         db = get_db()
         db.execute(

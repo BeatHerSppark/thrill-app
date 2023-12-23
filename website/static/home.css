@@ -1,15 +1,22 @@
 .home {
   display: flex;
   margin-top: 2rem;
-  gap: 1rem;
 }
 
 .home__posts {
   flex: 1;
 }
 
+.grid {
+  display: grid;
+  gap: 1rem;
+}
+
 .grid-item {
-  width: 300px;
+  width: 16rem;
+  background-color: #ffcad4;
+  padding: 0.5rem;
+  border-radius: 10px;
 }
 
 .home__side {

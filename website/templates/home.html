@@ -16,7 +16,6 @@ content %}
       <div class="post__details">
         <h3>{{ post['title'] }}</h3>
         <p>{{ post['body'] }}</p>
-        <p>{{ post['image_path'] }}</p>
         {% if g.user['id'] == post['author_id'] %}
         <a href="{{ url_for('views.edit', id=post['id']) }}">Edit</a>
         {% endif %}
