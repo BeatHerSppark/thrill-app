@@ -91,22 +91,33 @@ def edit(id):
     if request.method == 'POST':
         title = request.form['title']
         body = request.form['body']
-        #print(post['image_path'])
-        #image = None
-        #filename = None
-        #oldImage = get_db().execute(
-        #    'SELECT p.id, image_path FROM post p WHERE p.id = ?', (id,)
-        #)
+        oldImage = post['image_path']
+        image = None
+        filename = None
 
-        #if 'image' in request.files:
-        #    image = request.files['image']
-        #    if image.filename != '' and allowed_file(image.filename):
-        #        filename = secure_filename(image.filename)
+        if 'image' not in request.files:
+            flash('No image!')
+            return redirect(url_for('views.edit'))
+        
+        image = request.files['image']
+
+        if image.filename == '':
+            flash('No image!')
+            return redirect(url_for('views.edit'))
+        
+        if image and allowed_file(image.filename):
+            filename = secure_filename(image.filename)
+            print(os.path.join(create_app().config['UPLOAD_FOLDER'], oldImage[8::]))
+            os.remove(os.path.join(create_app().config['UPLOAD_FOLDER'], oldImage[8::]))
+            image.save(os.path.join(create_app().config['UPLOAD_FOLDER'], filename))
+        else:
+            flash('Something went wrong.')
+            return redirect(url_for('views.edit'))
         
         db = get_db()
         db.execute(
-            'UPDATE post SET title= ?, body = ?'
-            ' WHERE id = ?', (title, body, id)
+            'UPDATE post SET title= ?, body = ?, image_path = ?'
+            ' WHERE id = ?', (title, body, f"/images/{filename}", id)
         )
         db.commit()
         return redirect(url_for('views.home'))
@@ -117,8 +128,10 @@ def edit(id):
 @views.route('/<int:id>/delete', methods=('POST',))
 @login_required
 def delete(id):
-    get_post(id)
+    post = get_post(id)
+    oldImage = post['image_path']
     db = get_db()
     db.execute('DELETE FROM post WHERE id = ?', (id,))
     db.commit()
+    os.remove(os.path.join(create_app().config['UPLOAD_FOLDER'], oldImage[8::]))
     return redirect(url_for('views.home'))
