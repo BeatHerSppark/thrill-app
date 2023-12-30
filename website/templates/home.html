@@ -18,6 +18,13 @@ content %}
         <p>{{ post['body'] }}</p>
         {% if g.user['id'] == post['author_id'] %}
         <a href="{{ url_for('views.edit', id=post['id']) }}">Edit</a>
+        <button
+          id="likeButton"
+          data-user-id="{{g.user['id']}}"
+          data-post-id="{{post['id']}}"
+        >
+          Like
+        </button>
         {% endif %}
       </div>
     </div>
